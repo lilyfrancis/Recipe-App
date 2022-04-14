@@ -1,26 +1,37 @@
-<%= link_to new_food_url, :class => "btn btn-dark bg-dark add mb-3" do %> Add
-Food <% end %>
-<table class="table table-bordered table-striped table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Food</th>
-      <th scope="col">Measurement Unit</th>
-      <th scope="col">Unit Price</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @foods.each do | food| %>
-    <tr>
-      <th scope="row"><%= food.name%></th>
-      <td><%= food.measurement_unit %></td>
-      <td>$ <%= food.price %></td>
-      <td>
-        <% if can? :destroy, food %> <%= button_to "Delete Food",
-        "foods/#{food.id}", method: :delete, data: {confirm: "Are you sure"},
-        :class => "btn btn-sm btn-danger"%> <% else %> cannot delete <% end %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<h1 class='text-center mb-3'> Foods </h1>
+
+
+    <div class = 'col-8 d-flex flex-column margin-auto justify-content-center mx-auto'>
+
+        <div class='align-center p-5' > <%= link_to 'New food', new_user_food_path(current_user.id), class: 'btn btn-primary text-center' %></div> 
+
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Food</th>
+            <th scope="col">Measurement Unit</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <% current_user.foods.each do |food| %>
+            <tr>
+            <td><%= food.name %></td>
+            <td><%= food.measurement_unit %></td>
+            <td><%= food.price %></td>
+            <td><%= button_to "Delete Food", user_food_path(current_user.id, food.id), method: :delete, 
+                    data: {confirm: 'Are you sure?'}, class: "btn btn-primary" %> </td>
+            
+            </tr>
+            <% end %>
+        </tbody>
+
+
+        </table>
+
+    </div>
+
+
+

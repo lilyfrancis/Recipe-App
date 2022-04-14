@@ -1,50 +1,36 @@
 class RecipeFoodsController < ApplicationController
   def new
     @recipe = Recipe.find(params[:recipe_id])
-    @recipe_food = @recipe.recipe_foods.new
+    @foods = Food.all
+    @recipe_id = Recipe.find(params[:recipe_id]).id
+    @recipe_food = RecipeFood.new
   end
 
   def create
-    @recipe = Recipe.find(params[:recipe_id])
-    @recipe_food = @recipe.recipe_foods.create(recipe_foods_params)
+    @recipe = Recipe.find(params[:recipe_id]).id
+    @recipe_food = RecipeFood.new(recipe_food_params)
+    @recipe_food.recipe_id = Recipe.find(params[:recipe_id]).id
+    @recipe_food.food_id = Food.find(params[:food_id]).id
+
     if @recipe_food.save
-      flash[:notice] = 'Food created.'
-      redirect_to @recipe
+      flash[:success] = 'RecipeFood was succesfully created'
+      redirect_to new_user_recipe_recipe_food_path(current_user.id, @recipe)
     else
-      render :new
+      flash[:danger] = @recipe_food.errors.full_messages
+      render 'new'
     end
-  end
-
-  def edit
-    @recipe_food = RecipeFood.find(params[:id])
-  end
-
-  def update
-    @recipe_food = RecipeFood.find(params[:id])
-    if @recipe_food.update(update_params)
-      flash[:success] = 'Recipe Food updated successfully.'
-    else
-      flash[:error] = 'Could not add'
-    end
-    redirect_to recipe_path(@recipe_food.recipe_id)
   end
 
   def destroy
+    @recipe = Recipe.find(params[:recipe_id])
     @recipe_food = RecipeFood.find(params[:id])
     @recipe_food.destroy
-    flash[:success] = 'Recipe Food deleted successfully.'
-    redirect_to recipe_path(@recipe_food.recipe_id)
+    redirect_to user_recipe_path(current_user.id, @recipe.id)
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-
-  def update_params
-    params.require(:recipe_food).permit(:quantity, :food_id)
-  end
-
-  def recipe_foods_params
-    params.require(:recipe_food).permit(:quantity, :food_id)
+  def recipe_food_params
+    params.require(:recipe_food).permit(:quantity)
   end
 end
