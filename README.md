@@ -1,6 +1,6 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
-### Ruby on rails recipe app
+# Ruby on rails recipe app
 
 
 ### About the project
